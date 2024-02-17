@@ -50,7 +50,7 @@ ReactDOM.render(
 #### Setup Cart Slice
 
 - application feature
-- create features folder/cart
+- create redux folder/cart
 - create cartSlice.js
 
 ```js
@@ -77,7 +77,7 @@ export default cartSlice.reducer
 
 ```js
 import { configureStore } from '@reduxjs/toolkit'
-import cartReducer from './features/cart/cartSlice'
+import cartReducer from './redux/cart/cartSlice'
 
 export const store = configureStore({
   reducer: {
@@ -344,7 +344,7 @@ import React from 'react'
 import { ChevronDown, ChevronUp } from '../icons'
 
 import { useDispatch } from 'react-redux'
-import { removeItem, increase, decrease } from '../features/cart/cartSlice'
+import { removeItem, increase, decrease } from '../redux/cart/cartSlice'
 
 const CartItem = ({ id, img, title, price, amount }) => {
   const dispatch = useDispatch()
@@ -405,7 +405,7 @@ import { useEffect } from 'react'
 import Navbar from './components/Navbar'
 import CartContainer from './components/CartContainer'
 import { useSelector, useDispatch } from 'react-redux'
-import { calculateTotals } from './features/cart/cartSlice'
+import { calculateTotals } from './redux/cart/cartSlice'
 
 function App() {
   const { cartItems } = useSelector((state) => state.cart)
@@ -464,7 +464,7 @@ return (
 
 #### modal slice
 
-- create features/modal/modalSlice.js
+- create redux/modal/modalSlice.js
 
 ```js
 import { createSlice } from '@reduxjs/toolkit'
@@ -508,7 +508,7 @@ return (
 - CartContainer.js
 
 ```js
-import { openModal } from '../features/modal/modalSlice'
+import { openModal } from '../redux/modal/modalSlice'
 
 return (
   <button
@@ -525,9 +525,9 @@ return (
 - Modal.js
 
 ```js
-import { closeModal } from '../features/modal/modalSlice'
+import { closeModal } from '../redux/modal/modalSlice'
 import { useDispatch } from 'react-redux'
-import { clearCart } from '../features/cart/cartSlice'
+import { clearCart } from '../redux/cart/cartSlice'
 
 const Modal = () => {
   const dispatch = useDispatch()
@@ -588,18 +588,23 @@ export const getCartItems = createAsyncThunk('cart/getCartItems', () => {
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
-  extraReducers: {
-    [getCartItems.pending]: (state) => {
-      state.isLoading = true
-    },
-    [getCartItems.fulfilled]: (state, action) => {
-      console.log(action)
-      state.isLoading = false
-      state.cartItems = action.payload
-    },
-    [getCartItems.rejected]: (state) => {
-      state.isLoading = false
-    },
+  reducers: {
+    // reducers
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getCartItems.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getCartItems.fulfilled, (state, action) => {
+        // console.log(action);
+        state.isLoading = false
+        state.cartItems = action.payload
+      })
+      .addCase(getCartItems.rejected, (state, action) => {
+        console.log(action)
+        state.isLoading = false
+      })
   },
 })
 ```
@@ -607,7 +612,7 @@ const cartSlice = createSlice({
 - App.js
 
 ```js
-import { calculateTotals, getCartItems } from './features/cart/cartSlice'
+import { calculateTotals, getCartItems } from './redux/cart/cartSlice'
 
 function App() {
   const { cartItems, isLoading } = useSelector((state) => state.cart)
@@ -636,7 +641,7 @@ function App() {
 export default App
 ```
 
-#### Options
+#### Options (AJAX)
 
 ```sh
 npm install axios
@@ -661,33 +666,4 @@ export const getCartItems = createAsyncThunk(
     }
   }
 )
-```
-
-#### The extraReducers "builder callback" notation
-
-cart/cartSlice
-
-```js
-const cartSlice = createSlice({
-  name: 'cart',
-  initialState,
-  reducers: {
-    // reducers
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(getCartItems.pending, (state) => {
-        state.isLoading = true
-      })
-      .addCase(getCartItems.fulfilled, (state, action) => {
-        // console.log(action);
-        state.isLoading = false
-        state.cartItems = action.payload
-      })
-      .addCase(getCartItems.rejected, (state, action) => {
-        console.log(action)
-        state.isLoading = false
-      })
-  },
-})
 ```

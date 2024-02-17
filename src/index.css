@@ -150,7 +150,7 @@ nav svg {
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 50%;
-  background: var(--clr-primary-light);
+  background: var(--clr-red-dark);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -238,7 +238,7 @@ Cart Item
   color: var(--clr-grey-5);
 }
 .remove-btn {
-  color: var(--clr-primary);
+  color: var(--clr-red-dark);
   letter-spacing: var(--spacing);
   cursor: pointer;
   font-size: 0.85rem;
@@ -248,7 +248,7 @@ Cart Item
   transition: var(--transition);
 }
 .remove-btn:hover {
-  color: var(--clr-primary-light);
+  color: var(--clr-red-light);
 }
 .amount-btn {
   width: 24px;

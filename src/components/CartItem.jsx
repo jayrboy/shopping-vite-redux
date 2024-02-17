@@ -18,7 +18,7 @@ const CartItem = ({ id, img, title, price, amount }) => {
             dispatch(removeItem(id))
           }}
         >
-          remove
+          ลบ
         </button>
       </div>
       <div>
